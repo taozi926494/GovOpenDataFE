@@ -1,28 +1,29 @@
 <template>
 <div class="detailInfoContainer">
-    <div class="title"><span>{{ items.info.path }}</span></div>
-    <div class="resourceInfo">
+    <div class="title"><span>{{ items.info.name }}</span></div>
+    <div class="resourceInfo" v-if="isEmptyObject(JSON.parse(items.info.extra_info))">
         <div class="tip"><span>资源信息</span></div>
         <div  class="items">
-            <div class="item" v-for="(item, key, index) of JSON.parse(items.info.exract_info)" :key="'resourceInfo_'+index">
+            <div class="item" v-for="(item, key, index) of JSON.parse(items.info.extra_info)" :key="'resourceInfo_'+index">
                 <div class="lable"><span>{{ key }}</span></div>
                 <div class="value"><span>{{ item }}</span></div>
             </div>
         </div>
     </div>
-    <div class="dataInfo">
+    <div class="dataInfo" v-if="isEmptyObject(field_info)">
         <div class="tip"><span>数据信息</span></div>
-            <div  class="items">
-                <div class="item" v-for="(item, index) of JSON.parse(items.info.field_info)[0]" :key="'dataInfo1_'+index">
-                    <div class="lable"><span>{{ item }}</span></div>
+        <div  class="items">
+            <div class="item" v-for="(item, index) of field_info[0]" :key="'dataInfo1_'+index">
+                <div class="lable">
+                    <span>{{ item }}</span>
                 </div>
-                <div v-for="(item, index) of JSON.parse(items.info.field_info).slice(1, -1)" :key="'dataInfo2_'+index">
-                    <div class="item" v-for="(item, index) of item" :key="'dataInfo3_'+index">
-                        <div class="value"><span>{{ item }}</span></div>
-                    </div>
-                </div>
-               
             </div>
+            <div v-for="(item, index) of field_info.slice(1, -1)" :key="'dataInfo2_'+index">
+                <div class="item" v-for="(item, index) of item" :key="'dataInfo3_'+index">
+                    <div class="value"><span>{{ item }}</span></div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="fileDownload">
         <div class="tip"><span>数据下载</span></div>
@@ -59,7 +60,7 @@
                                 <el-button
                                     size="mini"
                                     @click="downloadFile(scope.row)">
-                                    <a :href="'http://127.0.0.1:5000/download/'+scope.row.path"  class="download">下载</a>
+                                    <a :href="'http://127.0.0.1:5000/download?path='+scope.row.path"  class="download">下载</a>
                                 </el-button>
                             </template>
                         </el-table-column>
@@ -309,23 +310,33 @@ import { getDatasetDetailApi } from '../api/DetailPageApi.js';
 
 
 export default {
-    name: 'DetailInfo',
+    name: 'DatasetInfo',
     data() {
         return {
-            items: {}
+            items: {
+                info: {
+                    
+                }
+            },
+            field_info: []
         }
             
     },
-    created(){
+    mounted(){
         this.getDatasetList()
     },
     methods: {
-        indexMethod(index) {
-            return index + 1;
+        isEmptyObject(obj){
+            for (var n in obj) {
+                return true
+            }
+            return false
         },
-        async downloadFile(fileInfo){
+        indexMethod(index) {
+            return index + 1
+        },
+        async downloadFile(){
             try{
-                console.log(fileInfo)
                 document.querySelector('.download').click()
             } catch(e) {
                 this.$message.error(e)
@@ -333,8 +344,7 @@ export default {
         },
         async getDatasetList(){
             try{
-                const path = 'ZheJiangOpendata/files/全省驾驶人体检医院信息'
-                const res = await getDatasetDetailApi(path, this.$route.query.id)
+                const res = await getDatasetDetailApi(this.$route.query.id)
                 this.items = res.data
             }catch(e) {
                 this.$message.error(e)

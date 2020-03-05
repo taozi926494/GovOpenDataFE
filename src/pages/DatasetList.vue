@@ -1,59 +1,58 @@
 <template>
-<div class="listPageContainer">
-    <div class="left">
+<div class="listPageContainer" >
+    <div class="left" v-show="leftFilterVisibleFlag">
         <div class="left_content">
           <div class="subjectFilterTop">
             <div @click="selectTagSource" :class="[tagSourceActive?'selectTag':'']">来源部门</div>
             <div @click="selectTagSubject" :class="[tagSubjectActive?'selectTag':'']">数据主题</div>
           </div>
           <div class="sourceItem">
-            <div v-for="(item, index) in renderData" :key="'source'+index" @click="getDataFilterByCondition(item)">{{item}}</div>
-          </div>
-        </div>
-        <div class="left_content">
-          <div class="subjectFilterTop">
-            <div  class="selectTag">行政区域</div>
-          </div>
-          <div class="sourceItem">
-            <div v-for="(item, index) in renderData" :key="'source'+index">{{item}}</div>
+            <div v-for="(item, index) in renderData" :key="'source'+index" @click="clickSourceOrSubjectTag(item)">{{item}}</div>
           </div>
         </div>
     </div>
-    <div class="right">
+    <div class="right" :style="htmlHeight">
       <div class="result">
         <div class="tips">
-          共 <span>{{ listQuery.total }}</span> 个数据集
+          共 <span>{{ pagination.total }}</span> 个数据集
         </div>
-        <div v-for="(item, index) in items" :key="index" class="dataItem">
-          <p class="title" @click="jumpToDetailPage(item)">{{ item.path }}</p>
-          <div class="extractInfo">
-            来源：<span>{{ item.source }}</span>
-            更新时间：<span>{{ item.update_date }}</span>
-            采集时间：<span> {{ item.acquire_date }} </span>
+        <div v-if="items.length > 0">
+          <div v-for="(item, index) in items" :key="index" class="dataItem">
+            <p class="title" @click="jumpToDetailPage(item)">{{ item.name }}</p>
+            <div class="extractInfo">
+              来源：<span>{{ item.department }}</span>
+              更新时间：<span>{{ item.update_date }}</span>
+              主题分类：<span> 信息产业</span>
+            </div>
+            <div class="abstract">
+              资源摘要：
+              <span>{{ item.abstract }}</span>
+            </div>
+            <div class="tools">
+              <div>
+                <i class="el-icon-download" />
+                {{ item.download_num }}
+              </div>
+              <div>
+                <i class="el-icon-view" />
+                {{ item.view_num }}
+              </div>         
+            </div>
           </div>
-          <div class="abstract">
-            资源摘要：
-            <span>{{ item.abstract }}</span>
-          </div>
-        <div class="tools">
-          <div>
-            <i class="el-icon-download" />
-            {{ item.download_num }}
-          </div>
-          <div>
-            <i class="el-icon-view" />
-            {{ item.view_num }}
-          </div>         
         </div>
-      </div>
+        <div class="no_result" v-else>
+          <div><img style="width:300px; height:auto;" src="../assets/no_result.jpg"></div>
+          
+        </div>
+       
       <div class="pagination">
         <el-pagination
           background
-          :current-page.sync="listQuery.page"
-          :page-size.sync="listQuery.limit"
+          :current-page.sync="pagination.currentPage"
+          :page-size.sync="pagination.pageSize"
           layout="total, prev, pager, next, jumper"
           @current-change="handleCurrentChange"
-          :total="listQuery.total">
+          :total="pagination.total">
         </el-pagination>
       </div>
     </div>
@@ -71,13 +70,14 @@
     display: flex;
     flex-direction:column;
     justify-items: flex-start;
+
     .left_content{
       display: flex;
       flex-direction:column;
       justify-items: flex-start;
       width: 300px;
-      height: 400px;
-      margin: 25px 50px;
+      height: 500px;
+      margin: 25px 10px 25px 50px;
       background-color: white;
       box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
       border-radius: 4px;
@@ -135,7 +135,7 @@
     justify-items: flex-start;
     text-align: left;
     width: 100%;
-    margin: 25px 50px 25px 0px;
+    margin: 25px 50px 25px 30px;
     box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     border: 1px solid rgba(223, 223, 223, 0.31);
@@ -197,6 +197,18 @@
 
         }
       }
+      .no_result{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: center;
+        height: 80%;
+        div{
+          display: flex;
+          justify-content: center;
+          justify-items: center;
+        }
+      }
     }
     .pagination{
       margin: 25px 50px 25px 25px;
@@ -221,15 +233,16 @@
 </style>
 
 <script>
-import { getDatasetListApi, getDatasetByKeywordApi, 
-         getDatasetAll, getDatasetByDepartment } from '../api/ListPageApi.js';
+import { getDatasetListApi } from '../api/ListPageApi.js';
 export default {
   data() {
     return {
       activeName: 'first',
-      listQuery: {
-        page: 1,
-        limit: 5,
+      htmlHeight: "min-height: 735px;",
+      leftFilterVisibleFlag: true,
+      pagination: {
+        currentPage: 1,
+        pageSize: 10,
         total: 0
       },
       items: [],
@@ -257,17 +270,19 @@ export default {
   created(){
     this.renderData = this.source
     this.getDatasetList()
+    if(this.$route.query.hasOwnProperty("keyword")){
+      this.leftFilterVisibleFlag = false
+    }
   },
   methods: {
     refreshDataByRouterParams(){
-      if (this.$route.name == 'ListPage' && this.$route.query.id === 'all'){
-        this.renderData = this.source
-        this.getDatasetList()
-      }
+
+      this.renderData = this.source
+      this.getDatasetList()
     },
     jumpToDetailPage(dataset) {
       this.$router.push({
-        path: `${this.$route.path}/${dataset.path}`,
+        path: `/dataset_info`,
         query: {
           id: dataset.id,
         }
@@ -291,48 +306,62 @@ export default {
         this.renderData = this.source
       }
     },
+    clickSourceOrSubjectTag(name){
+      var params = {
+        page: 1,
+        num: this.pagination.pageSize,
+      }
+      for(var key in this.$route.query){
+        params[key] = this.$route.query[key]
+      }
+      if (this.tagSourceActive) {
+        params["department"] = name
+      } else {
+        params["subject"] = name
+      }
+      this.$router.push({
+        path: `${this.$route.path}`,
+        query: params
+      })
+    },
+    clickRegionTag(id){
+      var params = {
+        page: 1,
+        num: this.pagination.pageSize,
+      }
+      for(var key in this.$route.query){
+        params[key] = this.$route.query[key]
+      }
+      params["gov_id"] = id
+      this.$router.push({
+        path: `${this.$route.path}`,
+        query: params
+      })
+    },
+
     // 数据查询翻页
     handleCurrentChange(val) {
-      this.listQuery.page = val
+      this.pagination.currentPage = val
       this.getDatasetList()
     },
     async getDatasetList(){
       try{
         var res = {}
-        if (this.$route.query.hasOwnProperty("id")  &&  this.$route.query.id === 'all'){
-          res = await getDatasetAll(this.listQuery.page, this.listQuery.limit)
-          this.items = res.data.data_page_info
-          this.listQuery.total = Number(res.data.nums)
-        }else if(this.$route.query.hasOwnProperty("searchKeyword")){
-          var keyword = this.$route.query.searchKeyword
-          res = await getDatasetByKeywordApi(keyword, this.listQuery.page, this.listQuery.limit)
-          this.items = res.data.data_page_info
-          this.listQuery.total = Number(res.data.nums)
+        var params = {
+          page: this.pagination.currentPage,
+          num: this.pagination.pageSize,
         }
-        else{
-          res = await getDatasetListApi(this.$route.query.id, this.listQuery.page, this.listQuery.limit)
-          this.items = res.data.data_page_info
-          this.listQuery.total = Number(res.data.nums)
+        for(var key in this.$route.query){
+          params[key] = this.$route.query[key]
         }
+        res = await getDatasetListApi(params)
+        this.items = res.data
+        this.pagination.total = res.total
+        
       }catch(e) {
         this.$message.error(e)
       }
     },
-    // 通过来源部门或者数据主题查找数据
-    async getDataFilterByCondition(name){
-      if(this.tagSourceActive){
-         this.$router.push({
-            path: `/dataList/name`,
-            query: {
-                source: name
-            }
-        })
-        const res = await getDatasetByDepartment(name, this.listQuery.page, this.listQuery.limit)
-        this.items = res.data.data_page_info
-        this.listQuery.total = Number(res.data.nums)
-      }
-    }
-
   }
 }
 </script>

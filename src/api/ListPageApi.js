@@ -1,16 +1,12 @@
 import request from '../utils/request.js'
 
 
-export function getDatasetListApi(id, pageIndex, pageSize) {
+export function getDatasetListApi(params) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/dataset',
+      url: '/search',
       method: 'get',
-      params: {
-        gov_id: id,
-        pageIndex: pageIndex,
-        pageSize: pageSize 
-      }
+      params: params
     }).then((res) => {
       resolve(res)
     }).catch((e) => {
