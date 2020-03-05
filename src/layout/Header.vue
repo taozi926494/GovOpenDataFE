@@ -7,7 +7,7 @@
         <div class="header_menu">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
                 <el-menu-item index="home"><a href="/" style="text-decoration:none;">首页</a></el-menu-item>
-                <el-menu-item index="dataset_list"><a href="#/dataList/government?id=all" style="text-decoration:none;">数据</a></el-menu-item>
+                <el-menu-item index="dataset_list"><a href="#/dataset_list" style="text-decoration:none;">数据</a></el-menu-item>
                 <el-menu-item index="3">统计分析</el-menu-item>
                 <el-menu-item index="4">交流互动</el-menu-item>
                 <el-menu-item index="5">咨询动态</el-menu-item>

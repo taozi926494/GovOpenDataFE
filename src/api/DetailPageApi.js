@@ -3,13 +3,12 @@ const querystring = require('querystring')
 
 
 
-export function getDatasetDetailApi(path, id) {
+export function getDatasetDetailApi(id) {
   return new Promise((resolve, reject) => {
     request({
-      url: '/detailInfo',
+      url: '/detail',
       method: 'get',
       params: {
-        path: path, 
         id: id,
       }
     }).then((res) => {
