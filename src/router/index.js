@@ -22,22 +22,22 @@ export default new Router({
             component: Home
         },
         {
-            path: '/dataset_list',
-            name: 'DatasetList',
+            path: '/datasetList',
+            name: 'datasetList',
             component: DatasetList
         },
         {
-            path: '/dataset_info',
-            name: 'DatasetInfo',
+            path: '/datasetInfo',
+            name: 'datasetInfo',
             component: DatasetInfo
         },
         {
             path: '/login',
-            name: 'Login',
+            name: 'login',
             component: Login
         },
         {
-            path: '/Register',
+            path: '/register',
             name: 'register',
             component: Register
         },

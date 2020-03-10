@@ -72,6 +72,7 @@ footer {
 
 		&-cn {
 			font-size: 25px;
+      font-weight: bold;
 		}
 	}
 </style>>

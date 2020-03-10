@@ -1,9 +1,7 @@
 <template>
     <div id="container" >
         <el-container direction="vertical" >
-            <el-header>
-                <Header />
-            </el-header>
+            <Header />
             <el-main>
                <router-view></router-view>
             </el-main> 
@@ -32,11 +30,16 @@ export default {
     text-decoration: none;
     font-family: "Microsoft YaHei"
 }
+html {
+    height: 100%;
+}
 body{
     margin:0;
     padding:0;
+    height: 100%;
     #container{
         display: flex;
+        height: 100%;
         flex-direction: column;
         .el-header{
             background-color: #E9EEF3;

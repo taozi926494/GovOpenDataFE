@@ -1,128 +1,98 @@
 <template>
-    <div class="headers">
-        <div class="logo">
-            <div class="img_logo"></div>
-            <div class="img_title"></div>
-        </div>
-        <div class="header_menu">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
-                <el-menu-item index="home"><a href="/" style="text-decoration:none;">首页</a></el-menu-item>
-                <el-menu-item index="dataset_list"><a href="#/dataset_list" style="text-decoration:none;">数据</a></el-menu-item>
-                <el-menu-item index="3">统计分析</el-menu-item>
-                <el-menu-item index="4">交流互动</el-menu-item>
-                <el-menu-item index="5">咨询动态</el-menu-item>
-                <el-menu-item index="6"><a href="http://www.bigdata.cetc.com.cn/" target="_blank" style="text-decoration:none;">关于我们</a></el-menu-item>
-            </el-menu>
-        </div>
-        <div class="user">
-            <div>
-                <el-button round class="login">登录</el-button>
-                <el-button round  class="register">注册</el-button>
-            </div>
-        </div>
-    </div>
+  <el-header class="header" style="background-color: #2b303b; color: #e6e6e6;">
+    <img :src="require('../assets/header/header_bg.png')" alt />
+    <div class="sysname">政府开放数据中心</div>
+    <ul class="header-menu">
+      <li :class="{active: ['home'].indexOf($route.name) > -1}">
+        <router-link to="/">首页</router-link>
+      </li>
+      <li :class="{active: ['datasetList', 'datasetInfo'].indexOf($route.name) > -1}">
+        <router-link to="/datasetList">数据</router-link>
+      </li>
+      <li>
+        <router-link to="/">统计分析</router-link>
+      </li>
+      <li>
+        <router-link to="/">咨询动态</router-link>
+      </li>
+      <li>
+        <a href="http://www.bigdata.cetc.com.cn/" target="_blank">关于我们</a>
+      </li>
+    </ul>
+    <!-- <div class="user">
+      <el-button round class="login">登录</el-button>
+      <el-button round class="register">注册</el-button>
+    </div>-->
+  </el-header>
 </template>
 
-<style lang="scss" scoped>
-.headers {
-    width: 98.95%;
-    height: 100%;
-    background-color: #2b303b;
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    padding-left: 20px;
-    .logo {
-        display: flex;
-        flex-direction: row;
-        align-items:center;
-        .img_logo {
-            width: 100px;
-            height: 40px;
-            margin-left: 10px;
-            background-image: url(../assets/header/header_bg.png);
-            background-repeat: no-repeat;
-            background-size: 100%;
-        }
-        .img_title {
-            width: 180px;
-            height: 40px;
-            margin-left: 10px;
-            background-image: url(../assets/header/header_title.png);
-            background-repeat: no-repeat;
-            background-size: 100%;
-        }
+<style lang="scss">
+.header-menu {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 15px;
+  margin-right: 40px;
+  li {
+    height: 60px;
+    line-height: 30px;
+    padding: 15px;
+    a {
+      color: #e6e6e6;
     }
-    .header_menu{
-        margin-left: 42%;
-        padding: 2px 0px 5px 0px;
-        .el-menu.el-menu--horizontal {
-            border-bottom: solid 0px #e6e6e6;
-        }
-        .el-menu--horizontal>.el-menu-item.is-active {
-            border-bottom: 2px solid #409EFF;
-            color: white;
-            font-weight: bolder;
-            background-color: transparent;
-        }
-        .el-menu--horizontal>.el-menu-item {
-            height: 45px;
-        }
-        ul{
-            height: 100%;
-            background-color: transparent;
-        }
-        ul > li:hover{
-            color: white;
-            background-color: #2b303b;
-        }
-        ul > li:visited{
-            color: white;
-            background-color: transparent;
-        }
-        
-    }
-    .user {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-left: 5%;
-        .login{
-            border-radius: 17px;
-            background: #4698ff;
-            border: 1px solid white;
-            text-align: center;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .register{
-            border-radius: 17px;
-            background: #FFF;
-            border: 1px solid white;
-            text-align: center;
-            color: #2287ef;
-            font-size: 14px;
-            font-weight: bold;
-
-        }
-        .el-button{
-            padding: 8px 20px;
-        }
-    }
-
+    list-style: none;
+  }
+  li.active {
+    border-bottom: 5px solid #409eff;
+  }
 }
-
+.header {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  padding-left: 20px;
+  img {
+    height: 26px;
+    width: 84px;
+    margin-left: 25px;
+  }
+  .sysname {
+    font-size: 22px;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  .user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5%;
+    .login {
+      border-radius: 17px;
+      background: #4698ff;
+      border: 1px solid white;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .register {
+      border-radius: 17px;
+      background: #fff;
+      border: 1px solid white;
+      text-align: center;
+      color: #2287ef;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .el-button {
+      padding: 8px 20px;
+    }
+  }
+}
 </style>
 
 <script>
 export default {
-    name: 'Header',
-    computed: {
-       activeIndex() {
-            return this.$route.name;
-        }
-    }
-    
-}
+  name: "Header",
+};
 </script>
