@@ -1,44 +1,96 @@
 <template>
-  <div class="listPageContainer">
-    <div class="left">
-      <div class="left_content">
-        <div class="subjectFilterTop">
-          <div v-show="filterTab.department">来源部门</div>
-          <div v-show="filterTab.subject">数据主题</div>
-          <div v-show="filterTab.government">行政区域</div>
+  <div class="list-page">
+    <div class="filter-section">
+      <el-input placeholder="请输入关键字，多个关键字用空格隔开" v-model="searchKeyword" class="input_select">
+        <el-button
+          type="primary"
+          slot="append"
+          icon="el-icon-search"
+          @click="params.keyword = searchKeyword; getDatasetList();"
+        >搜索</el-button>
+      </el-input>
+
+      <div class="type-filter">
+        <div class="type-filter-title-box">
+          <div
+            class="type-filter-title"
+            v-show="filterTab.government.show"
+            :class="{active: filterTab.government.active}"
+            @click="showFilterTab('government')"
+          >行政区域</div>
+          <div
+            class="type-filter-title"
+            v-show="filterTab.department.show"
+            :class="{active: filterTab.department.active}"
+            @click="showFilterTab('department')"
+          >来源部门</div>
+          <div
+            class="type-filter-title"
+            v-show="filterTab.subject.show"
+            :class="{active: filterTab.subject.active}"
+            @click="showFilterTab('subject')"
+          >数据主题</div>
         </div>
 
-        <div class="sourceItem" v-show="filterTab.department">
+        <!-- 行政区域 -->
+        <div class="type-filter-box" v-show="filterTab.government.active">
           <div
+            class="word-filter"
+            v-for="(gov, govIndex) in governments"
+            :key="govIndex"
+            @click="govChange(gov)"
+            :class="{active: params.government.gov_id == gov.gov_id}"
+          >
+            {{ gov.region }}
+            <span class="province-tip">{{ gov.province }}</span>
+          </div>
+        </div>
+
+        <!-- 来源部门 -->
+        <div class="type-filter-box" v-show="filterTab.department.active">
+          <div
+            class="word-filter"
             v-for="(dep, depIndex) in departments"
             :key="depIndex"
             @click="departChange(dep)"
+            :class="{active: params.department == dep}"
           >{{ dep }}</div>
         </div>
 
-        <div class="sourceItem" v-show="filterTab.subject">
+        <!-- 数据主题 -->
+        <div class="type-filter-box" v-show="filterTab.subject.active">
           <div
+            class="word-filter"
             v-for="(sub, subIndex) in subjects"
             :key="subIndex"
             @click="subjectChange(sub)"
+            :class="{active: params.subject == sub}"
           >{{ sub }}</div>
-        </div>
-
-        <div class="sourceItem" v-show="filterTab.government">
-          <el-tree
-            :data="provinceTree"
-            :props="{children: 'children', label: 'label'}"
-            @node-click="govChange"
-          ></el-tree>
         </div>
       </div>
     </div>
-    <div class="right">
+    <div class="dataset-section">
       <div class="filter-condition">
-        <el-tag closable v-show="filterCondition.keyword != null">关键字： {{ filterCondition.keyword }}</el-tag>
-        <el-tag closable v-show="filterCondition.government.gov_id != null">区域： {{ filterCondition.keyword }}</el-tag>
-        <el-tag closable v-show="filterCondition.keyword != null">部门： {{ filterCondition.keyword }}</el-tag>
-        <el-tag closable v-show="filterCondition.subject != null">主题： {{ filterCondition.keyword }}</el-tag>
+        <el-tag
+          closable
+          @close="closeFilterTag('keyword')"
+          v-show="validVal(params.keyword)"
+        >关键字： {{ params.keyword }}</el-tag>
+        <el-tag
+          closable
+          @close="closeFilterTag('government')"
+          v-show="validVal(params.government.gov_id)"
+        >区域： {{ params.government.region }}</el-tag>
+        <el-tag
+          @close="closeFilterTag('department')"
+          closable
+          v-show="validVal(params.department)"
+        >部门： {{ params.department }}</el-tag>
+        <el-tag
+          @close="closeFilterTag('subject')"
+          closable
+          v-show="validVal(params.subject)"
+        >主题： {{ params.subject }}</el-tag>
       </div>
 
       <div class="loading" v-show="loadStatus === 'loading'">
@@ -48,191 +100,148 @@
 
       <div class="no_result" v-show="loadStatus === 'noResult'">
         <img src="../assets/no_result.png" />
-        <span>对不起，没有找到相关的数据...</span>
-        <div class="search">
-          <el-input placeholder="请输入关键字，多个关键字用空格隔开" v-model="searchKeyword" class="input_select">
-            <el-button slot="append" icon="el-icon-search" @click="search">搜索</el-button>
-          </el-input>
-        </div>
-        <div></div>
+        <span>对不起，没有找到数据...</span>
       </div>
 
       <div class="result" v-show="loadStatus === 'hasResult'">
-        <div class="tips">
-          共
-          <span>{{ pagination.total }}</span>
-          个数据集
-          
-        </div>
-
-        <div>
-          <div v-for="(dataset, index) in datasetArr" :key="index" class="data-item">
-            <div class="data-item-title" @click="jumpToDetailPage(dataset)">{{ dataset.name }}</div>
-            <div class="extractInfo">
-              来源：
-              <span>{{ dataset.department }}</span>
-              更新时间：
-              <span>{{ dataset.update_date }}</span>
-              主题分类：
-              <span>信息产业</span>
-            </div>
-            <div class="abstract">
-              资源摘要：
-              <span>{{ dataset.abstract }}</span>
-            </div>
-            <div class="tools">
-              <div>
-                <i class="el-icon-download" />
-                {{ dataset.download_num }}
-              </div>
-              <div>
-                <i class="el-icon-view" />
-                {{ dataset.view_num }}
-              </div>
-            </div>
+        <div v-for="(dataset, index) in datasetArr" :key="index" class="data-item">
+          <div class="data-item-title" @click="goDetailPage(dataset)">{{ dataset.name }}</div>
+          <div class="data-base-info">
+            来源：
+            <span>{{ dataset.department }}</span>
+            更新时间：
+            <span>{{ dataset.update_date }}</span>
+            主题分类：
+            <span>信息产业</span>
+          </div>
+          <div class="data-base-info">
+            <i class="el-icon-download" />
+            <span class="number">{{ dataset.download_num }}</span>
+            <i class="el-icon-view" />
+            <span class="number">{{ dataset.view_num }}</span>
           </div>
         </div>
+      </div>
 
-        <div class="pagination">
-          <el-pagination
-            background
-            :current-page.sync="pagination.currentPage"
-            :page-size.sync="pagination.pageSize"
-            layout="total, prev, pager, next, jumper"
-            @current-change="handleCurrentChange"
-            :total="pagination.total"
-          ></el-pagination>
-        </div>
+      <div class="pagination" v-show="loadStatus == 'hasResult'">
+        <el-pagination
+          background
+          :current-page.sync="pagination.currentPage"
+          :page-size.sync="pagination.pageSize"
+          layout="total, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          :total="pagination.total"
+        ></el-pagination>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.listPageContainer {
+.list-page {
+  @include flex(row, flex-start, flex-start);
   background-color: aliceblue;
-  display: flex;
-  flex-direction: row;
-  justify-items: flex-start;
-  .left {
-    display: flex;
-    flex-direction: column;
-    justify-items: flex-start;
+  padding: 25px;
 
-    .left_content {
-      display: flex;
-      flex-direction: column;
-      justify-items: flex-start;
-      width: 300px;
-      height: 500px;
-      margin: 25px 10px 25px 50px;
-      background-color: white;
-      box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      border: 1px solid rgba(223, 223, 223, 0.31);
-      .subjectFilterTop {
-        width: 100%;
-        display: inline-flex;
-        justify-content: space-between;
-        font-size: 16px;
-        background-color: #357ed2;
-        font-size: 14px;
-        color: white;
-        font-family: "微软雅黑";
-        margin-bottom: 20px;
-        div {
-          padding: 8px;
-          width: 50%;
-          cursor: pointer;
-        }
-        .selectTag {
-          background-color: rgb(7, 102, 211);
-          font-size: 16px;
+  .filter-section {
+    @include flex(column);
+    width: 360px;
+    margin-right: 25px;
+
+    .type-filter {
+      margin-top: 10px;
+      width: 100%;
+      background: $color-pure-white;
+
+      &-title-box {
+        @include flex();
+        background-color: $color-main-gray-lighter;
+        color: $color-font-gray;
+        .active {
+          background-color: $color-main-blue;
+          color: $color-pure-white;
         }
       }
-      .sourceItem {
-        overflow: auto;
-        text-align: left;
-        font-size: 14px;
-        margin-left: 8px;
-        margin-bottom: 10px;
-        color: #5d7a9e;
+      &-title {
+        flex: 1;
+        padding: 4px 0;
         cursor: pointer;
-        div {
-          margin-bottom: 10px;
-        }
-        div:hover {
-          color: black;
+      }
+
+      &-box {
+        font-size: 14px;
+        text-align: left;
+        color: $color-font-gray;
+        max-height: 470px;
+        padding: 5px 0;
+        overflow: auto;
+        .active {
+          background: $color-main-gray-lighter;
+          border-right: 4px solid $color-main-blue;
         }
       }
-    }
-    .left_content:nth-child(2) {
-      margin: 0px 50px 20px 50px;
-      .subjectFilterTop {
-        text-align: left;
-        div {
-          padding-left: 10px;
-          width: 100%;
+
+      .word-filter {
+        padding: 5px 10px;
+        cursor: pointer;
+        &:hover {
+          background: $color-main-gray-lighter;
+        }
+        .province-tip {
+          font-size: 8px;
+          color: $color-font-gray-lighter;
         }
       }
     }
   }
-  .right {
-    display: flex;
-    flex-direction: row;
-    justify-items: flex-start;
-    text-align: left;
-    width: 100%;
-    margin: 25px 50px 25px 30px;
+  .dataset-section {
+    @include shadow-card;
+    @include flex(column, flex-start);
+    flex: 1;
+    background-color: $color-pure-white;
 
-    // border: 1px solid rgba(223, 223, 223, 0.31);
+    .filter-condition {
+      width: 100%;
+      @include flex(row, flex-start);
+      .el-tag {
+        display: block;
+        margin: 10px;
+      }
+    }
 
     .loading {
       width: 200px;
       height: 50px;
       font-size: 14px;
       text-align: center;
-      margin: 30% auto;
+      margin: 10% auto;
     }
 
     .no_result {
+      @include flex(column);
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 80%;
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: center;
+      // align-items: center;
+      
+      margin: 25px 0;
 
       img {
-        height: 140px;
+        height: 180px;
         margin-top: 40px;
       }
     }
 
     .result {
       width: 100%;
-      background-color: white;
-      box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-      .tips {
-        height: 53px;
-        line-height: 53px;
-        font-size: 16px;
-        color: #45668f;
-        background: #fff;
-        border-bottom: 1px solid #e4ebf0;
-        padding: 0px 0px 0px 30px;
-        span {
-          font-size: 22px;
-          color: #ff7468;
-          font-weight: bold;
-          padding: 0 10px;
-        }
-      }
       .data-item {
         margin-bottom: 10px;
-        padding: 0px 0px 15px 30px;
+        padding: 10px 20px;
         border-bottom: 1px solid #e4ebf0;
+        &:first-child {
+          border-top: 1px solid #e4ebf0;
+        }
         &-title {
           color: #45668f;
           cursor: pointer;
@@ -240,41 +249,30 @@
           font-weight: 700;
           margin: 10px 0;
         }
-        .extractInfo {
+        .data-base-info {
           font-size: 14px;
           color: #aab8ca;
           line-height: 15px;
           overflow: hidden;
           margin-bottom: 10px;
+          display: flex;
           span {
             color: #5d7a9e;
-            padding-right: 50px;
+            padding-right: 40px;
           }
-        }
-        .abstract {
-          font-size: 14px;
-          color: #aab8ca;
-          line-height: 15px;
-          overflow: hidden;
-          margin-bottom: 10px;
-          span {
-            color: #5d7a9e;
-            padding-right: 50px;
+          i {
+            margin-right: 4px;
           }
-        }
-        .tools {
-          color: #555;
-          font-size: 14px;
-          background-color: transparent;
-          display: inline-flex;
-          div {
-            padding-right: 20px;
+          span.number {
+            padding-right: 12px;
           }
         }
       }
     }
     .pagination {
-      margin: 25px 50px 25px 25px;
+      display: flex;
+      margin: 25px 0;
+      padding-left: 15px;
     }
   }
   ::-webkit-scrollbar {
@@ -298,16 +296,27 @@
 <script>
 import { getDatasetListApi, getDepartmentsApi } from "../api/ListPageApi.js";
 import { getIndexApi } from "../api/IndexPageApi";
+import { validVal } from "../utils/toolkit";
+
 export default {
   data() {
     return {
       loading: true,
       filterTab: {
-        department: false,
-        subject: true,
-        government: false
+        department: {
+          show: false,
+          active: false
+        },
+        subject: {
+          show: true,
+          active: false
+        },
+        government: {
+          show: false,
+          active: false
+        }
       },
-      filterCondition: {
+      params: {
         government: { gov_id: null, region: null },
         subject: null,
         department: null,
@@ -324,6 +333,7 @@ export default {
       datasetArr: [],
       departments: [],
       provinceTree: [],
+      governments: [],
       subjects: [
         "综合政务",
         "经济管理",
@@ -357,46 +367,53 @@ export default {
     }
   },
   mounted() {
+    this.routeToParams();
     this.init();
   },
   methods: {
-    refreshDataByRouterParams() {
-      this.mounted();
-    },
     async init() {
       this.loadStatus = "loading";
-      if (!this.$route.query.hasOwnProperty("gov_id")) {
-        this.filterTab.government = true;
-        this.filterTab.department = false;
-        const data = await getIndexApi();
-        const provinceTree = [];
-        for (const province in data.province_dict) {
-          const tree = {
-            label: province
-          };
-          const citys = data.province_dict[province];
-          if (citys.length > 0) {
-            tree.children = [];
-            for (const city of citys) {
-              tree.children.push({
-                label: city.region,
-                gov_id: city.id
-              });
-            }
-          }
-          provinceTree.push(tree);
+
+      // 无论如何先请求全部行政区域数据
+      const data = await getIndexApi();
+      for (const province in data.province_dict) {
+        const citys = data.province_dict[province];
+        for (const city of citys) {
+          this.governments.push({
+            province: province,
+            region: city.region,
+            gov_id: city.gov_id
+          });
         }
-        this.provinceTree = provinceTree;
+      }
+
+      if (!validVal(this.params.government.gov_id)) {
+        // 如果没有带行政区划，请求所有行政区划
+        this.filterTab.government.show = true;
+        if (validVal(this.params.subject)) {
+          this.filterTab.subject.active = true;
+        } else {
+          this.filterTab.government.active = true;
+        }
       } else {
         // 请求所有委办局
-        this.filterTab.government = false;
-        this.filterTab.department = true;
-        this.departments = await getDepartmentsApi(this.$route.query.gov_id);
+        this.filterTab.government.show = false;
+        this.filterTab.department.show = true;
+
+        if (validVal(this.params.subject)) {
+          this.filterTab.subject.active = true;
+        } else {
+          this.filterTab.department.active = true;
+        }
+
+        this.departments = await getDepartmentsApi(
+          this.params.government.gov_id
+        );
       }
       await this.getDatasetList();
     },
 
-    jumpToDetailPage(dataset) {
+    goDetailPage(dataset) {
       this.$router.push({
         path: `/datasetInfo`,
         query: {
@@ -404,51 +421,91 @@ export default {
         }
       });
     },
+    showFilterTab(title) {
+      for (const key in this.filterTab) {
+        if (key == title) {
+          this.filterTab[key].active = true;
+        } else {
+          this.filterTab[key].active = false;
+        }
+      }
+    },
     departChange(item) {
-      this.loadStatus = "loading";
-      this.$route.query.department = item;
+      this.params.department = item;
+      this.pagination.currentPage = 1;
       this.getDatasetList();
     },
     subjectChange(item) {
-      this.$route.query.subject = item;
+      this.params.subject = item;
+      this.pagination.currentPage = 1;
       this.getDatasetList();
     },
-    govChange(item) {
-      if (item.gov_id != undefined) {
-        this.$route.query.gov_id = item.gov_id;
-        this.getDatasetList();
-      }
-    },
-    clickRegionTag(id) {
-      var params = {
-        page: 1,
-        num: this.pagination.pageSize
-      };
-      for (var key in this.$route.query) {
-        params[key] = this.$route.query[key];
-      }
-      params["gov_id"] = id;
-      this.$router.push({
-        path: `${this.$route.path}`,
-        query: params
-      });
-    },
+    async govChange(item) {
+      this.params.government.gov_id = item.gov_id;
+      this.params.government.region = item.region;
+      this.pagination.currentPage = 1;
+      this.getDatasetList();
 
+      // 显示部门
+      this.filterTab.department.show = true;
+      this.filterTab.department.active = true;
+      this.filterTab.government.show = false;
+      this.filterTab.government.active = false;
+      this.departments = [];
+      this.departments = await getDepartmentsApi(this.params.government.gov_id);
+    },
+    closeFilterTag(tag) {
+      // 关闭区域tag
+      if (tag == "government") {
+        this.params.government.gov_id = null;
+        this.params.government.region = null;
+
+        this.filterTab.department.show = false;
+        this.filterTab.department.active = false;
+        this.params.department = null;
+
+        this.filterTab.government.show = true;
+        this.filterTab.government.active = this.filterTab.subject.active
+          ? false
+          : true;
+      } else {
+        this.params[tag] = null;
+      }
+      this.getDatasetList();
+    },
     // 数据查询翻页
     handleCurrentChange(val) {
       this.pagination.currentPage = val;
       this.getDatasetList();
     },
+    validVal(val) {
+      return validVal(val);
+    },
+    paramsToPost() {
+      const params = this.params;
+      const dict = {};
+      if (validVal(params.government.gov_id))
+        dict.gov_id = params.government.gov_id;
+      if (validVal(params.keyword)) dict.keyword = params.keyword;
+      if (validVal(params.department)) dict.department = params.department;
+      if (validVal(params.subject)) dict.subject = params.subject;
+      return dict;
+    },
+    routeToParams() {
+      const routeParams = this.$route.params;
+      if (validVal(routeParams.government)) {
+        this.params.government.region = routeParams.government.region;
+        this.params.government.gov_id = routeParams.government.gov_id;
+      }
+      this.params.keyword = routeParams.keyword;
+      this.params.subject = routeParams.subject;
+    },
     async getDatasetList() {
       try {
-        // 构造查询字典
-        let params = {
-          page: this.pagination.currentPage,
-          num: this.pagination.pageSize
-        };
-        for (var key in this.$route.query) {
-          params[key] = this.$route.query[key];
-        }
+        this.loadStatus = "loading";
+        let params = this.paramsToPost();
+        params.page = this.pagination.currentPage;
+        params.num = this.pagination.pageSize;
 
         const res = await getDatasetListApi(params);
         this.datasetArr = res.data;
@@ -460,15 +517,6 @@ export default {
         this.$message.error(e);
         this.loadStatus = "noResult";
       }
-    },
-    search() {
-      this.$store.commit("sethistory", this.searchKeyword);
-      this.$router.push({
-        path: `/datasetList`,
-        query: {
-          keyword: this.searchKeyword
-        }
-      });
     }
   }
 };

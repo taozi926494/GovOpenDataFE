@@ -28,9 +28,8 @@
 
 <style lang="scss">
 .header-menu {
+  @include flex(row, flex-end);
   flex: 1;
-  display: flex;
-  justify-content: flex-end;
   font-size: 15px;
   margin-right: 40px;
   li {
@@ -38,18 +37,16 @@
     line-height: 30px;
     padding: 15px;
     a {
-      color: #e6e6e6;
+      color: $color-main-white;
     }
     list-style: none;
   }
   li.active {
-    border-bottom: 5px solid #409eff;
+    border-bottom: 5px solid $color-main-blue;
   }
 }
 .header {
-  display: flex;
-  justify-items: center;
-  align-items: center;
+  @include flex();
   padding-left: 20px;
   img {
     height: 26px;
@@ -57,14 +54,12 @@
     margin-left: 25px;
   }
   .sysname {
-    font-size: 22px;
+    @include font-title-big;
     margin-left: 10px;
-    font-weight: bold;
+    color: $color-main-white;
   }
   .user {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    @include flex(column);
     margin-left: 5%;
     .login {
       border-radius: 17px;

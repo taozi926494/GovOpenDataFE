@@ -5,3 +5,11 @@
 export const stampToTime = tm => {
     return new Date(parseInt(tm)).toLocaleString().replace(/:\d{1,2}$/, ' ');
 }
+
+export const validVal = val => {
+    if (val != undefined && val != null && val != '') {
+        return true;
+    } else {
+        return false;
+    }
+}

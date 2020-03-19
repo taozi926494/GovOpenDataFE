@@ -1,0 +1,53 @@
+$width: 70%;
+$block-margin: 15px;
+.dataset-info {
+    @include flex(column);
+    background-color: #eff3f7;
+    /** 标题 **/
+    .title {
+        background-color: $color-pure-white;
+        width: $width;
+        margin-bottom: $block-margin;
+        padding: 15px 0;
+        h3 {
+            margin: 0;
+            color: #2b72c3;
+            font-weight: bold;
+        }
+        .abstract {
+            width: 100%;
+            margin-top: 15px;
+            padding: 0 20px;
+            font-size: 10px;
+            color: #555555;
+            text-align: left;
+            font-weight: lighter;
+        }
+    }
+    .meta-item {
+        font-size: 12px;
+    }
+    /** 版块 **/
+    .dataset-info-section {
+        // @include flex(column, center, flex-start, wrap);
+        background-color: $color-pure-white;
+        width: $width;
+        margin-bottom: $block-margin;
+        padding-bottom: 40px;
+        .title {
+            padding: 10px 20px;
+            color: $color-pure-white;
+            background-color: $color-main-blue;
+            width: 150px;
+        }
+        .content {
+            padding: 20px;
+        }
+    }
+    /** 分页 **/
+    .pagination {
+        .el-pagination span {
+            font-size: 12px;
+        }
+    }
+}
