@@ -64,19 +64,8 @@
       <div class="regionTitle">
         <img src="@/assets/index/subject_classification.png" />
       </div>
-      <div class="index-section-content">
-        <div
-          class="index-section-item"
-          v-for=" (item, index) in  subject"
-          :key="index"
-          @click="goListPage({subject: item.name})"
-        >
-          <img
-            v-bind:src="require(`@/assets/index/icons_subject/${item.image_name}`)"
-            class="subject-icon"
-          />
-          {{ item.name }}
-        </div>
+      <div class="index-section-content"> 
+        <SubjectItem v-for="subject in subjects" :key="subject" :subject="subject" @click.native="goListPage({ subject })" />
       </div>
     </div>
   </div>
@@ -90,12 +79,14 @@
 import { getIndexApi } from "@/api/IndexPageApi.js";
 import StatisCard from "./components/StatisCard";
 import ProvinceItem from "./components/ProvinceItem";
+import SubjectItem from "./components/SubjectItem";
 
 export default {
   name: "home",
   components: {
     StatisCard,
-    ProvinceItem
+    ProvinceItem,
+    SubjectItem
   },
   data() {
     return {
@@ -112,87 +103,27 @@ export default {
       regionList: [],
       regionListTemp: [],
       editableTabsValue: "1",
-      subject: [
-        {
-          name: "综合政务",
-          image_name: "综合政务.png"
-        },
-        {
-          name: "经济管理",
-          image_name: "经济管理.png"
-        },
-        {
-          name: "农业、水利",
-          image_name: "农业、水利.png"
-        },
-        {
-          name: "财政",
-          image_name: "财政.png"
-        },
-        {
-          name: "商业、贸易",
-          image_name: "商业、贸易.png"
-        },
-        {
-          name: "对外事务",
-          image_name: "对外事务.png"
-        },
-        {
-          name: "政法、监察",
-          image_name: "政法、监察.png"
-        },
-        {
-          name: "科技、教育",
-          image_name: "科技、教育.png"
-        },
-        {
-          name: "文化、卫生、体育",
-          image_name: "文化、卫生、体育.png"
-        },
-        {
-          name: "军事、国防",
-          image_name: "军事、国防.png"
-        },
-        {
-          name: "劳动、人事",
-          image_name: "劳动、人事.png"
-        },
-        {
-          name: "民政、社区",
-          image_name: "民政、社区.png"
-        },
-        {
-          name: "文秘、行政",
-          image_name: "文秘、行政.png"
-        },
-        {
-          name: "综合党团",
-          image_name: "综合党团.png"
-        },
-        {
-          name: "信息产业",
-          image_name: "信息产业.png"
-        },
-        {
-          name: "国土资源、能源",
-          image_name: "国土资源、能源.png"
-        },
-        {
-          name: "工业、交通、邮政",
-          image_name: "工业、交通、邮政.png"
-        },
-        {
-          name: "城乡建设、环境保护",
-          image_name: "城乡建设、环境保护.png"
-        },
-        {
-          name: "旅游、服务业",
-          image_name: "旅游、服务业.png"
-        },
-        {
-          name: "气象、水文、测绘、地震",
-          image_name: "气象、水文、测绘、地震.png"
-        }
+      subjects: [
+        "综合政务",
+        "经济管理",
+        "农业、水利",
+        "财政",
+        "商业、贸易",
+        "对外事务",
+        "政法、监察",
+        "科技、教育",
+        "文化、卫生、体育",
+        "军事、国防",
+        "劳动、人事",
+        "民政、社区",
+        "文秘、行政",
+        "综合党团",
+        "信息产业",
+        "国土资源、能源",
+        "工业、交通、邮政",
+        "城乡建设、环境保护",
+        "旅游、服务业",
+        "气象、水文、测绘、地震",
       ],
       subRegionChildren: []
     };
