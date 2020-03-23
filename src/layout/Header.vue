@@ -12,8 +12,8 @@
       <li>
         <router-link to="/">统计分析</router-link>
       </li>
-      <li>
-        <router-link to="/">咨询动态</router-link>
+      <li :class="{active: ['news'].indexOf($route.name) > -1}">
+        <router-link to="/news">咨讯动态</router-link>
       </li>
       <li>
         <a href="http://www.bigdata.cetc.com.cn/" target="_blank">关于我们</a>

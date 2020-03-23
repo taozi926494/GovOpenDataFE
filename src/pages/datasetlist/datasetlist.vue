@@ -249,10 +249,6 @@ export default {
       }
       await this.getDatasetList();
     },
-    fuck() {
-      console.log("fuck");
-    },
-
     goDetailPage(id) {
       this.$router.push({
         path: `/datasetInfo`,
