@@ -1,0 +1,19 @@
+.news-page {
+    background-color: aliceblue;
+    padding: 25px;
+    
+}
+.news-content {
+    width: 100%;
+    position: relative;
+}
+.see-more {
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.8), aliceblue);
+    padding: 20px;
+    color: $color-main-blue;
+}
