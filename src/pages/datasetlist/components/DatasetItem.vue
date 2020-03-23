@@ -5,13 +5,13 @@
       来源：
       <span>{{ dataset.department }}</span>
       更新时间：
-      <span>{{ dataset.update_date }}</span>
+      <span>{{ dataset.update_date | formatEnTime }}</span>
       主题分类：
       <span>信息产业</span>
     </div>
     <div class="data-base-info">
       <i class="el-icon-download" />
-      <span class="number">{{ dataset.download_num }}</span>
+      <span class="number">{{ dataset.download_num}}</span>
       <i class="el-icon-view" />
       <span class="number">{{ dataset.view_num }}</span>
     </div>
@@ -19,9 +19,13 @@
 </template>
 
 <script>
+import { formatEnTime } from "@/utils/toolkit";
 export default {
   props: {
     dataset: { type: Object }
+  },
+  filters: {
+    formatEnTime
   }
 };
 </script>

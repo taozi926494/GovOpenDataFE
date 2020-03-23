@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="dataset-section">
-      <div class="filter-condition">
+      <div class="filter-tags" :class="{show: filterTagsShow}">
         <el-tag
           closable
           @close="closeFilterTag('keyword')"
@@ -104,7 +104,12 @@
       </div>
 
       <div class="result">
-        <DatasetItem v-for="dataset in datasetArr" :key="dataset.id" :dataset="dataset" @click.native="goDetailPage(dataset.id)" />
+        <DatasetItem
+          v-for="dataset in datasetArr"
+          :key="dataset.id"
+          :dataset="dataset"
+          @click.native="goDetailPage(dataset.id)"
+        />
       </div>
 
       <div class="pagination" v-show="loadStatus == 'hasResult'">
@@ -207,6 +212,16 @@ export default {
     this.routeToParams();
     this.init();
   },
+  computed: {
+    filterTagsShow() {
+      return (
+        validVal(this.params.government.gov_id) ||
+        validVal(this.params.region) ||
+        validVal(this.params.subject) ||
+        validVal(this.params.keyword)
+      );
+    }
+  },
   methods: {
     async init() {
       this.loadStatus = "loading";
@@ -223,7 +238,6 @@ export default {
           });
         }
       }
-
       if (!validVal(this.params.government.gov_id)) {
         // 如果没有带行政区划，请求所有行政区划
         this.filterTab.government.show = true;
