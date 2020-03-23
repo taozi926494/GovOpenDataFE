@@ -5,6 +5,7 @@ import DatasetInfo from '../pages/datasetInfo/datasetInfo'
 import DatasetList from '../pages/datasetlist/datasetlist'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
+import News from '../pages/news/news'
 
 Vue.use(Router)
 
@@ -39,6 +40,11 @@ export default new Router({
             path: '/register',
             name: 'register',
             component: Register
+        },
+        {
+            path: '/news',
+            name: 'news',
+            component: News
         },
     ]
 })
