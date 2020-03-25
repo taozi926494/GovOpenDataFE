@@ -3,7 +3,7 @@
         <div class="meta-item-title">数据来源</div>
         <div class="meta-item-value">{{ data.department }}</div>
         <div class="meta-item-title">更新时间</div>
-        <div class="meta-item-value">{{ data.update_date }}</div>
+        <div class="meta-item-value">{{ data.update_date | formatEnTime }}</div>
         <div class="meta-item-title">资源类别</div>
         <div class="meta-item-value">{{ data.subject_origin }}</div>
         <div class="meta-item-title">下载次数</div>
@@ -13,11 +13,15 @@
 </template>
 
 <script>
+import { formatEnTime } from "@/utils/toolkit";
 export default {
     props: {
         data: {
             type: Object
         }
+    },
+    filters: {
+        formatEnTime
     }
 }
 </script>

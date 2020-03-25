@@ -21,3 +21,12 @@ export const validVal = val => {
         return false;
     }
 }
+
+
+/**
+ * 后端对名字相同的数据集加了$$$和uuid用来区别
+ * @param {String} name 
+ */
+export const formatName = name => {
+    return name.split('$$$')[0]
+}

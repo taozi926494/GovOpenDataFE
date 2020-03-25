@@ -1,13 +1,13 @@
 <template>
   <div class="data-item">
-    <div class="data-item-title">{{ dataset.name }}</div>
+    <div class="data-item-title">{{ dataset.name | formatName }}</div>
     <div class="data-base-info">
       来源：
       <span>{{ dataset.department }}</span>
       更新时间：
       <span>{{ dataset.update_date | formatEnTime }}</span>
       主题分类：
-      <span>信息产业</span>
+      <span>{{ dataset.subject_auto }}</span>
     </div>
     <div class="data-base-info">
       <i class="el-icon-download" />
@@ -19,13 +19,14 @@
 </template>
 
 <script>
-import { formatEnTime } from "@/utils/toolkit";
+import { formatEnTime, formatName } from "@/utils/toolkit";
 export default {
   props: {
     dataset: { type: Object }
   },
   filters: {
-    formatEnTime
+    formatEnTime,
+    formatName
   }
 };
 </script>

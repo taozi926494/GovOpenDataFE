@@ -1,5 +1,7 @@
 <template>
   <footer>
+    <img src="@/assets/logo.png">
+
     <div class="footer-section footer-sysname">
       <span class="footer-sysname-cn">政府开放数据中心</span>
       <i>GOVERNMENT OPEN DATA CENTER</i>
@@ -7,7 +9,7 @@
 
     <div class="footer-section">
       <div class="affirm">
-        <span>©2020 中电科大数据研究院有限公司-共性技术研究中心</span>
+        <span>©2020 中电科大数据研究院有限公司-提升政府治理能力大数据应用技术国家工程实验室</span>
       </div>
 
       <div class="contact-method">
@@ -22,7 +24,7 @@
           <a href="http://www.cetc.com.cn" target="_blank">中国电科</a>
         </span>
         <span>
-          <a href="http://www.bigdata.cetc.com.cn" target="_blank">中电科大数据研究院</a>
+          <a href="http://www.bigdata.cetc.com.cn" target="_blank">中电科大数据研究院有限公司</a>
         </span>
         <span>
           <a href="http://www.gyopendata.gov.cn/city/index.htm" target="_blank">贵阳市政府开放平台</a>
@@ -37,9 +39,9 @@
 <style lang="scss">
 $footerColor: #8c919f;
 footer {
+  @include flex(row, flex-start);
   width: 100%;
   padding: 15px 150px;
-  display: flex;
   background-color: #2d2f42;
   color: $footerColor;
   font-family: "微软雅黑";
@@ -53,6 +55,11 @@ footer {
     a:hover {
       color: #4698ff;
     }
+  }
+  img {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
   }
 }
 .footer-section {

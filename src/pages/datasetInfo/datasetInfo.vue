@@ -1,7 +1,7 @@
 <template>
   <div class="dataset-info">
     <div class="title">
-      <h3>{{ dataset.name }}</h3>
+      <h3>{{ dataset.name | formatName }}</h3>
       <div class="abstract">{{ dataset.abstract }}</div>
     </div>
     <div class="dataset-info-section">
@@ -33,7 +33,7 @@
               <el-button size="mini">
                 <a
                   target="_blank"
-                  :href="`http://127.0.0.1:5000/files?dataset_id=${dataset.id}&filepath=${scope.row.file_path_rel}`"
+                  :href="`http://172.16.119.6:5009/files?dataset_id=${dataset.id}&filepath=${scope.row.file_path_rel}`"
                   class="download"
                 >下载</a>
               </el-button>
@@ -65,7 +65,7 @@
 
 <script>
 import { getDatasetDetailApi } from "@/api/DetailPageApi.js";
-import { stampToTime } from "@/utils/toolkit";
+import { stampToTime, formatName } from "@/utils/toolkit";
 import FieldTable from "./components/FieldTable";
 import MetaItem from "./components/MetaItem";
 
@@ -94,6 +94,9 @@ export default {
   },
   mounted() {
     this.getDatasetList();
+  },
+  filters: {
+    formatName
   },
   methods: {
     hasContent(obj) {
