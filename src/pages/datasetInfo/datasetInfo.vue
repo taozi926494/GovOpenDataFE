@@ -6,14 +6,8 @@
     </div>
     <div class="dataset-info-section">
       <div class="title">资源信息</div>
-
-      <div class="meta">
-        <el-row>
-          <el-col :span="24" class="meta-item">
-            <div class="meta-title">摘要</div>
-            <div class="meta-val">{{ dataset.abstract }}</div>
-          </el-col>
-        </el-row>
+      <div class="content">
+        <MetaItem :data="dataset" />
       </div>
     </div>
 
@@ -73,11 +67,13 @@
 import { getDatasetDetailApi } from "@/api/DetailPageApi.js";
 import { stampToTime } from "@/utils/toolkit";
 import FieldTable from "./components/FieldTable";
+import MetaItem from "./components/MetaItem";
 
 export default {
   name: "DatasetInfo",
   components: {
-    FieldTable
+    FieldTable,
+    MetaItem
   },
   data() {
     return {
@@ -86,7 +82,7 @@ export default {
         name: null,
         extra_info: {},
         field_info: {},
-        files: []
+        files: [],
       },
       filtedFiles: [],
       pagination: {
