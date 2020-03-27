@@ -1,5 +1,5 @@
 <template>
-  <el-header class="header" style="background-color: #2b303b; color: #e6e6e6;">
+  <header>
     <img :src="require('../assets/header/header_bg.png')" alt />
     <div class="sysname">政府开放数据中心</div>
     <ul class="header-menu">
@@ -23,17 +23,20 @@
       <el-button round class="login">登录</el-button>
       <el-button round class="register">注册</el-button>
     </div>-->
-  </el-header>
+  </header>
 </template>
 
 <style lang="scss">
 .header-menu {
   @include flex(row, flex-end);
   flex: 1;
-  font-size: 15px;
+  font-size: 14px;
   margin-right: 40px;
+  background-color: #2b303b;
+  color: #e6e6e6;
   li {
     height: 60px;
+
     line-height: 30px;
     padding: 15px;
     a {
@@ -45,16 +48,18 @@
     border-bottom: 5px solid $color-main-blue;
   }
 }
-.header {
+header {
   @include flex();
+  height: 60px;
   padding-left: 20px;
+  background-color: #2b303b; color: #e6e6e6;
   img {
-    height: 26px;
-    width: 84px;
+    height: 22px;
     margin-left: 25px;
   }
   .sysname {
-    @include font-title-big;
+    font-size: 22px;
+    font-weight: bolder;
     margin-left: 10px;
     color: $color-main-white;
   }
@@ -88,6 +93,6 @@
 
 <script>
 export default {
-  name: "Header",
+  name: "Header"
 };
 </script>

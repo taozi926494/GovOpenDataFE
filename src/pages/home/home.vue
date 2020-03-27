@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="home">
     <div class="carousel">
       <el-carousel trigger="click" height="350px">
         <el-carousel-item v-for="item in 2" :key="item">
@@ -41,7 +41,7 @@
 
     <!-- 搜索 -->
     <div class="search">
-      <el-input placeholder="请输入关键字，多个关键字用空格隔开" v-model="searchKeyword" class="input_select">
+      <el-input placeholder="请输入关键字，多个关键字用空格隔开" @keyup.enter.native="search"  v-model="searchKeyword" class="input_select">
         <el-button slot="append" icon="el-icon-search" @click="search">搜索</el-button>
       </el-input>
     </div>
@@ -49,23 +49,34 @@
 
     <!-- 行政区域模块 -->
     <div class="index-section">
-      <div class="regionTitle">
+      <div class="index-section-title">
         <img src="@/assets/index/region_division.png" />
       </div>
       <div class="index-section-content">
-        <div class="index-section-item" v-for="(govList, province) in provinceDict" :key="province">
-          <ProvinceItem :province="province" :governments="govList" @gov-click="goListPage"  />
-        </div>
+        <ProvinceItem
+          class="index-section-item"
+          v-for="(govList, province) in provinceDict"
+          :key="province"
+          :province="province"
+          :governments="govList"
+          @gov-click="goListPage"
+        />
       </div>
     </div>
 
     <!-- 主题模块 -->
     <div class="index-section">
-      <div class="regionTitle">
+      <div class="index-section-title">
         <img src="@/assets/index/subject_classification.png" />
       </div>
-      <div class="index-section-content"> 
-        <SubjectItem v-for="subject in subjects" :key="subject" :subject="subject" @click.native="goListPage({ subject })" />
+      <div class="index-section-content">
+        <SubjectItem
+          class="index-section-item"
+          v-for="subject in subjects"
+          :key="subject"
+          :subject="subject"
+          @click.native="goListPage({ subject })"
+        />
       </div>
     </div>
   </div>
@@ -123,7 +134,7 @@ export default {
         "工业、交通、邮政",
         "城乡建设、环境保护",
         "旅游、服务业",
-        "气象、水文、测绘、地震",
+        "气象、水文、测绘、地震"
       ],
       subRegionChildren: []
     };
@@ -141,7 +152,7 @@ export default {
       this.statis.dataSetNum = data.dataset_num;
       this.statis.dataFileNum = data.file_num;
       this.statis.govNum = data.gov_num;
-      this.statis.fileSize = Math.ceil(data.file_size * 100 / 1024) / 100;
+      this.statis.fileSize = Math.ceil((data.file_size * 100) / 1024) / 100;
 
       this.provinceDict = data.province_dict;
     },

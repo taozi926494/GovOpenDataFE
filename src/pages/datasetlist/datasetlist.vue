@@ -1,7 +1,12 @@
 <template>
   <div class="list-page">
     <div class="filter-section">
-      <el-input placeholder="请输入关键字，多个关键字用空格隔开" v-model="searchKeyword" class="input_select">
+      <el-input
+        placeholder="请输入关键字，多个关键字用空格隔开"
+        @keyup.enter.native="params.keyword = searchKeyword; getDatasetList();"
+        v-model="searchKeyword"
+        class="input_select"
+      >
         <el-button
           type="primary"
           slot="append"
@@ -352,6 +357,7 @@ export default {
     },
     async getDatasetList() {
       try {
+        this.datasetArr = []
         this.loadStatus = "loading";
         let params = this.paramsToPost();
         params.page = this.pagination.currentPage;

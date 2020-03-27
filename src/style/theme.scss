@@ -1,2 +1,43 @@
 @import "./mixin.scss";
 @import "./variables.scss";
+* {
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: "Microsoft YaHei";
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+header,
+footer {
+    width: 100%;
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+div::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 4px;
+    /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+
+div::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 4px;
+    background: #535353;
+}
+
+div::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    border-radius: 4px;
+    background: #EDEDED;
+}

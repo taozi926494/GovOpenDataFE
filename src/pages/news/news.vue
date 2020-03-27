@@ -2,7 +2,7 @@
     <div class="news-page">
         <div class="news-content">
             <NewsItem v-for="(news, index) in newsList" :key="index" :news="news" />
-            <div class="see-more" @click="seeMore">
+            <div class="see-more" @click="seeMore" v-show="newsList.length > 0">
                 查看更多...
             </div>
         </div>

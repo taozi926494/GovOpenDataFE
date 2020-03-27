@@ -9,7 +9,7 @@
 
     <div class="footer-section">
       <div class="affirm">
-        <span>©2020 中电科大数据研究院有限公司-提升政府治理能力大数据应用技术国家工程实验室</span>
+        <span>©2020 提升政府治理能力大数据应用技术国家工程实验室-中电科大数据研究院有限公司</span>
       </div>
 
       <div class="contact-method">
@@ -41,11 +41,11 @@ $footerColor: #8c919f;
 footer {
   @include flex(row, flex-start);
   width: 100%;
-  padding: 15px 150px;
+  padding: 10px 150px;
   background-color: #2d2f42;
   color: $footerColor;
   font-family: "微软雅黑";
-  font-size: 12px;
+  font-size: 10px;
 
   .link {
     a {
@@ -75,7 +75,7 @@ footer {
 .footer-sysname {
   padding-right: 40px;
   margin-right: 40px;
-  text-align: right;
+  text-align: left;
   border-right: 1px solid $footerColor;
   color: #e6e6e6;
 

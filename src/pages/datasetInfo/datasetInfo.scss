@@ -3,6 +3,7 @@ $block-margin: 15px;
 .dataset-info {
     @include flex(column);
     background-color: #eff3f7;
+    text-align: center;
     /** 标题 **/
     .title {
         background-color: $color-pure-white;

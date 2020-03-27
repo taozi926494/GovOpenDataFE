@@ -1,9 +1,12 @@
 <template>
   <el-popover placement="bottom" width="200" trigger="click" class="province-item">
     <div class="gov-list">
-      <div class="sub_region" v-for="gov in governments" :key="gov.gov_id">
-        <a class="index-gov-link" @click="govClick({government: gov})">{{ gov.region }}</a>
-      </div>
+      <a
+        v-for="gov in governments"
+        :key="gov.gov_id"
+        class="gov-link"
+        @click="govClick({government: gov})"
+      >{{ gov.region }}</a>
     </div>
     <div slot="reference" class="province">
       <img v-bind:src="require(`@/assets/index/icons_region/${province}.png`)" />
@@ -24,7 +27,7 @@ export default {
   },
   methods: {
     govClick(gov) {
-      this.$emit('gov-click', gov)
+      this.$emit("gov-click", gov);
     }
   }
 };
@@ -32,11 +35,27 @@ export default {
 
 <style lang="scss">
 .province-item {
-  .gov-list {
-    @include flex();
-  }
   .province {
     @include flex(column);
+  }
+
+  img {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.gov-list {
+  @include flex(row, flex-start);
+}
+.gov-link {
+  cursor: pointer;
+  margin-left: 10px;
+  height: 25px;
+  padding-bottom: 3px;
+  &:hover {
+    font-weight: bolder;
+    border-bottom: 2px solid $color-main-blue;
   }
 }
 </style>

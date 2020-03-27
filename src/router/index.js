@@ -6,6 +6,7 @@ import DatasetList from '../pages/datasetlist/datasetlist'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
 import News from '../pages/news/news'
+import NotFound from '../pages/NotFound'
 
 Vue.use(Router)
 
@@ -45,6 +46,10 @@ export default new Router({
             path: '/news',
             name: 'news',
             component: News
-        },
+        }, {
+            path: '*',
+            name: 'notFound',
+            component: NotFound
+        }
     ]
 })

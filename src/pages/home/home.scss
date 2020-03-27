@@ -14,58 +14,34 @@
 
 .index-section {
     width: 1300px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    &:first-child {
+        margin-top: 30px;
+    }
     &-title {
-        width: 100%;
-        text-align: left;
-        border-left: 8px solid #4698ff;
-        padding-left: 15px;
-        font-size: 20px;
-        font-weight: bolder;
-        margin-bottom: 20px;
-    }
-    &-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        flex-flow: wrap;
-        width: 100%;
-    }
-    &-item {
-        width: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        justify-items: center;
-        margin: 30px;
-        cursor: pointer;
+        @include flex();
         img {
-            height: 70px;
-            margin: 0 auto;
-            margin-bottom: 15px;
-        }
-        .subject-icon {
             height: 40px;
         }
     }
-}
-
-.index-gov-link {
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 2px;
-    &:hover {
-        background: #217eff;
-        color: #fff;
+    &-content {
+        @include flex(row, flex-start);
+        flex-flow: wrap;
+    }
+    &-item {
+        width: 110px;
+        margin: 30px;
+        font-size: 13px;
+        text-align: center;
+        cursor: pointer;
+        img {
+            margin-bottom: 10px;
+        }
     }
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: auto;
+.home {
+    @include flex(column);
     .carousel {
         width: 100%;
     }
@@ -92,100 +68,6 @@
             justify-content: space-between;
             /* 水平居中 */
             position: absolute;
-        }
-    }
-    .region {
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex-flow: wrap;
-            width: 100%;
-            .rows {
-                width: 100%;
-                margin-bottom: 40px;
-                .row_visible {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    justify-items: center;
-                    justify-content: center;
-                    margin-left: 40px;
-                    margin-top: 30px;
-                    .row_visible_center {
-                        width: 100%;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: flex-start;
-                        justify-items: center;
-                        .rowitem {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            justify-items: center;
-                            margin-right: 5%;
-                            cursor: pointer;
-                            .imgicon {
-                                width: 100px;
-                            }
-                        }
-                    }
-                }
-                .row_hidden {
-                    width: 100%;
-                    background-color: white;
-                    display: flex;
-                    flex-direction: row;
-                    flex-flow: wrap;
-                    justify-content: flex-start;
-                    margin-top: 15px;
-                    animation: mymove 1s infinite;
-                    -webkit-animation: mymove 1.5s infinite;
-                    .row_hidden_item {
-                        float: left;
-                        margin-right: 50px;
-                        margin-bottom: 20px;
-                    }
-                }
-                @keyframes mymove {
-                    from {
-                        opacity: 0;
-                    }
-                    to {
-                        opacity: 1;
-                    }
-                }
-                @-webkit-keyframes mymove {
-                    from {
-                        opacity: 0;
-                    }
-                    to {
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-    }
-    .subject {
-        display: flex;
-        width: 85%;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            flex-flow: wrap;
-            width: 100%;
-            .subjectItem {
-                width: 5%;
-                margin: 30px 3% 40px 3%;
-                cursor: pointer;
-                .imgicon {
-                    margin-bottom: 15px;
-                }
-            }
         }
     }
 }
