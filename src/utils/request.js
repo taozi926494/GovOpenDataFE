@@ -4,6 +4,7 @@ import { Message } from 'element-ui'
 // 创建axios实例
 const service = axios.create({
     baseURL: 'http://172.16.119.6:5009',
+    // baseURL: 'http://localhost:5009',
     timeout: 15000, // 请求超时时间
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     withCredentials: true // 跨域session

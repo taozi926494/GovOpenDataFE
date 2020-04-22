@@ -9,8 +9,8 @@
       <li :class="{active: ['datasetList', 'datasetInfo'].indexOf($route.name) > -1}">
         <router-link to="/datasetList">数据</router-link>
       </li>
-      <li>
-        <router-link to="/">统计分析</router-link>
+      <li :class="{active: ['statistic'].indexOf($route.name) > -1}">
+        <router-link to="/statistic">统计分析</router-link>
       </li>
       <li :class="{active: ['news'].indexOf($route.name) > -1}">
         <router-link to="/news">咨讯动态</router-link>

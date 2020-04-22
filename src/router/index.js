@@ -1,12 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../pages/home/home'
-import DatasetInfo from '../pages/datasetInfo/datasetInfo'
-import DatasetList from '../pages/datasetlist/datasetlist'
-import Login from '../pages/Login'
-import Register from '../pages/Register'
-import News from '../pages/news/news'
-import NotFound from '../pages/NotFound'
+
 
 Vue.use(Router)
 
@@ -20,36 +14,49 @@ export default new Router({
         {
             path: '/home',
             name: 'home',
-            component: Home
+            component: () =>
+                import ('@/pages/home/home.vue')
         },
         {
             path: '/datasetList',
             name: 'datasetList',
-            component: DatasetList
+            component: () =>
+                import ('@/pages/datasetlist/datasetlist.vue')
         },
         {
             path: '/datasetInfo',
             name: 'datasetInfo',
-            component: DatasetInfo
+            component: () =>
+                import ('@/pages/datasetInfo/datasetInfo.vue')
         },
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: () =>
+                import ('@/pages/Login.vue')
         },
         {
             path: '/register',
             name: 'register',
-            component: Register
+            component: () =>
+                import ('@/pages/Register.vue')
         },
         {
             path: '/news',
             name: 'news',
-            component: News
+            component: () =>
+                import ('@/pages/news/news.vue')
+        },
+        {
+            path: '/statistic',
+            name: 'statistic',
+            component: () =>
+                import ('@/pages/statistic/statistic.vue')
         }, {
             path: '*',
             name: 'notFound',
-            component: NotFound
+            component: () =>
+                import ('@/pages/NotFound.vue')
         }
     ]
 })

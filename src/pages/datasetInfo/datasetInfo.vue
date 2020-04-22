@@ -27,7 +27,12 @@
           <el-table-column label="序号" width="50" type="index" :index="indexMethod"></el-table-column>
           <el-table-column prop="name" label="文件名" min-width="450"></el-table-column>
           <el-table-column prop="create_time" label="创建时间" min-width="180"></el-table-column>
-          <el-table-column prop="size" label="大小" min-width="100"></el-table-column>
+          <el-table-column prop="size" label="大小" min-width="100">
+            <template slot-scope="scope">
+              <span v-if="scope.row.size == 0">  &lt; 0.1 KB</span>
+              <span v-else> {{ scope.row.size }} MB</span>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <el-button size="mini">
