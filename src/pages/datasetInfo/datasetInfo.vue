@@ -35,13 +35,11 @@
           </el-table-column>
           <el-table-column label="操作" width="100">
             <template slot-scope="scope">
-              <el-button size="mini">
                 <a
                   target="_blank"
-                  :href="`http://172.16.119.6:5009/files?dataset_id=${dataset.id}&filepath=${scope.row.file_path_rel}`"
+                  :href="`${BASE_URL}/files?dataset_id=${dataset.id}&filepath=${scope.row.file_path_rel}`"
                   class="download"
                 >下载</a>
-              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -73,6 +71,7 @@ import { getDatasetDetailApi } from "@/api/DetailPageApi.js";
 import { stampToTime, formatName } from "@/utils/toolkit";
 import FieldTable from "./components/FieldTable";
 import MetaItem from "./components/MetaItem";
+import { BASE_URL } from "@/api/init";
 
 export default {
   name: "DatasetInfo",
@@ -94,7 +93,8 @@ export default {
         currentPage: 1,
         pageSize: 5,
         total: 0
-      }
+      },
+      BASE_URL
     };
   },
   mounted() {

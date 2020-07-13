@@ -44,6 +44,9 @@
     @include flex(column);
     .carousel {
         width: 100%;
+        &-img {
+            width: 100%;
+        }
     }
     .history {
         width: 60%;

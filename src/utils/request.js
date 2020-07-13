@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import { BASE_URL } from '@/api/init';
+
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: 'http://172.16.119.6:5009',
-    // baseURL: 'http://localhost:5009',
+    // baseURL: 'http://172.16.119.6:5080',
+    baseURL: BASE_URL,
     timeout: 15000, // 请求超时时间
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     withCredentials: true // 跨域session

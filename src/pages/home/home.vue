@@ -3,7 +3,7 @@
     <div class="carousel">
       <el-carousel trigger="click" height="350px">
         <el-carousel-item v-for="item in 2" :key="item">
-          <img v-bind:src="require(`@/assets/index/carousel_img${item}.jpg`)" />
+          <img class="carousel-img" v-bind:src="require(`@/assets/index/carousel_img${item}.jpg`)" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -29,12 +29,12 @@
           :value="statis.govNum"
           unit="个"
         />
-        <StatisCard
+        <!-- <StatisCard
           :iconSrc="require('@/assets/index/icon_resource_scale.png')"
           title="资源规模"
           :value="statis.fileSize"
           unit="GB"
-        />
+        /> -->
       </div>
     </div>
     <!-- 数据摘要 end -->

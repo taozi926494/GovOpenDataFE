@@ -109,12 +109,7 @@
       </div>
 
       <div class="result">
-        <DatasetItem
-          v-for="dataset in datasetArr"
-          :key="dataset.id"
-          :dataset="dataset"
-          @click.native="goDetailPage(dataset.id)"
-        />
+        <DatasetItem v-for="dataset in datasetArr" :key="dataset.id" :dataset="dataset" />
       </div>
 
       <div class="pagination" v-show="loadStatus == 'hasResult'">
@@ -357,7 +352,7 @@ export default {
     },
     async getDatasetList() {
       try {
-        this.datasetArr = []
+        this.datasetArr = [];
         this.loadStatus = "loading";
         let params = this.paramsToPost();
         params.page = this.pagination.currentPage;

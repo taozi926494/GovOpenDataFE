@@ -1,5 +1,5 @@
 <template>
-  <div class="data-item">
+  <router-link class="data-item" :to="`/datasetinfo?id=${dataset.id}`" target="_blank">
     <div class="data-item-title">{{ dataset.name | formatName }}</div>
     <div class="data-base-info">
       来源：
@@ -15,7 +15,7 @@
       <i class="el-icon-view" />
       <span class="number">{{ dataset.view_num }}</span>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -33,6 +33,7 @@ export default {
 
 <style lang="scss">
 .data-item {
+  display: block;
   margin-bottom: 10px;
   padding: 10px 20px;
   border-bottom: 1px solid #e4ebf0;
